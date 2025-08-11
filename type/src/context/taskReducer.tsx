@@ -1,4 +1,4 @@
-import type { TaskAction, TaskState } from "../types/type";
+import type { TaskAction, TaskState } from "../type/type";
 
 // Task Reducer Function
 export const taskReducer = (
@@ -78,7 +78,7 @@ export const initialTaskState: TaskState = {
       id: "4",
       taskName: "Write unit tests for API endpoints",
       priority: "Medium",
-      category: "Testing",
+      category: "Frontend",
       dueDate: "2025-08-15",
       assignedUser: "Diana Wilson",
       assignedOn: "2025-08-08",

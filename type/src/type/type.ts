@@ -44,8 +44,7 @@ export const CATEGORIES = [
   "Backend",
   "Meeting",
   "Design",
-  "Testing",
-  "DevOps",
+  
 ];
 export const TEAM_MEMBERS = [
   "Alice Johnson",

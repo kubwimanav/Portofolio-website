@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import TaskForm from "./TaskForm";
+import TaskCard from "./TaskCard";
+import StatsDashboard from "./StatsDashboard";
+import TaskFilters from "./TaslFilter";
 import { getDueDateStatus } from "./Utility";
-import { BiPlus } from "react-icons/bi";
-import type { Filters, Task } from "../types/type";
-import TaskForm from "./LoginForm";
-import TaskCard from "./Taskcard";
+import type { Filters, Task } from "../type/type";
 import { useTaskContext } from "../hooks/useTaskContext";
+import { BiPlus } from "react-icons/bi";
 
-const Dashboard: React.FC = () => {
+const TaskDashboard: React.FC = () => {
+  const { state, dispatch } = useTaskContext();
   const [showForm, setShowForm] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [filters, setFilters] = useState<Filters>({
@@ -18,9 +21,29 @@ const Dashboard: React.FC = () => {
   });
 
   // Filter tasks based on current filter settings
- 
+  const filteredTasks = state.tasks.filter((task) => {
+    // Status filter
+    if (filters.status === "Completed" && !task.completed) return false;
+    if (filters.status === "Incomplete" && task.completed) return false;
 
-  const { storedData } = useTaskContext();
+    // Priority filter
+    if (filters.priority && task.priority !== filters.priority) return false;
+
+    // Category filter
+    if (filters.category && task.category !== filters.category) return false;
+
+    // Due date filter
+    if (filters.dueDate) {
+      const taskDueDateStatus = getDueDateStatus(task.dueDate);
+      if (taskDueDateStatus !== filters.dueDate) return false;
+    }
+
+    // Assigned user filter
+    if (filters.assignedUser && task.assignedUser !== filters.assignedUser)
+      return false;
+
+    return true;
+  });
 
   // Handle adding new task
   const handleAddTask = (task: Task) => {
@@ -64,10 +87,10 @@ const Dashboard: React.FC = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Team Task Tracker
+             Task Management
             </h1>
             <p className="text-gray-600 mt-1">
-              Manage your team's tasks efficiently
+              Manage your team's tasks
             </p>
           </div>
           <button
@@ -82,15 +105,15 @@ const Dashboard: React.FC = () => {
         {/* Statistics Dashboard */}
 
         {/* Filters */}
-        {/* <TaskFilters
+        <TaskFilters
           filters={filters}
           onFilterChange={setFilters}
           tasks={state.tasks}
-        /> */}
+        />
 
         {/* Task List */}
         <div className="space-y-4">
-          {/* {filteredTasks.length === 0 ? (
+          {filteredTasks.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-lg shadow">
               <div className="max-w-md mx-auto">
                 <div className="mb-4">
@@ -124,10 +147,10 @@ const Dashboard: React.FC = () => {
                 )}
               </div>
             </div>
-          ) : ( */}
+          ) : (
             <>
               {/* Results summary */}
-              {/* <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-between items-center mb-4">
                 <p className="text-sm text-gray-600">
                   Showing {filteredTasks.length} of {state.tasks.length} tasks
                 </p>
@@ -143,19 +166,21 @@ const Dashboard: React.FC = () => {
                     Clear filters
                   </button>
                 )}
-              </div> */}
+              </div>
 
               {/* Task Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {storedData.map((task) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                {filteredTasks.map((task) => (
                   <TaskCard
                     key={task.id}
-                    
+                    task={task}
+                    onEdit={handleEditTask}
+                    onDelete={handleDeleteTask}
                   />
                 ))}
               </div>
             </>
-          
+          )}
         </div>
 
         {/* Modal Forms */}
@@ -178,4 +203,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default TaskDashboard;

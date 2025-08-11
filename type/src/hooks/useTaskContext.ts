@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { TaskContext } from "../context/Context";
+import type { TaskContextType } from "../type/type";
 
-export const useTaskContext = () => {
+export const useTaskContext = (): TaskContextType => {
   const context = useContext(TaskContext);
 
   if (!context) {
@@ -10,6 +11,3 @@ export const useTaskContext = () => {
 
   return context;
 };
-
-// Export the context for advanced use cases
-export { TaskContext };
