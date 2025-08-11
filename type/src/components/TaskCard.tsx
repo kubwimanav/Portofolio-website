@@ -1,12 +1,10 @@
 import React from "react";
-import { formatDate, getCategoryColor, getDueDateInfo, getPriorityColor } from "./Utility";
-import { BiBox, BiCalendar, BiCheckbox, BiCheckCircle, BiEdit, BiTag, BiUser } from "react-icons/bi";
-import { BsOption, BsTrash2 } from "react-icons/bs";
-import { FiAlertCircle, FiEdit2 } from "react-icons/fi";
-import { CiRuler } from "react-icons/ci";
+import { formatDate, getDueDateInfo} from "./Utility";
+import { BiCheckbox, BiCheckCircle,BiUser } from "react-icons/bi";
+import {  BsTrash2 } from "react-icons/bs";
+import {  FiEdit2 } from "react-icons/fi";
 import type { Task } from "../type/type";
 import { useTaskContext } from "../hooks/useTaskContext";
-import { CgCheck } from "react-icons/cg";
 
 
 interface TaskCardProps {
